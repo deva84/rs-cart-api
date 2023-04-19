@@ -1,0 +1,31 @@
+service: cart-service
+
+useDotenv: true
+
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: 'us-east-1'
+  stage: 'dev'
+
+  environment:
+    PG_HOST: ${env:HOST}
+    PG_PORT: ${env:PORT}
+    PG_DATABASE: ${env:DB}
+    PG_USERNAME: ${env:USERNAME}
+    PG_PASSWORD: ${env:PASSWORD}
+
+functions:
+  main:
+    handler: dist/main.handler
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: '{proxy+}'
